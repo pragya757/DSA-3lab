@@ -1,0 +1,110 @@
+#include <stdio.h>
+
+#define MAX_SIZE 100
+
+void insert(int list[], int *size, int element, int position);
+void deleteElement(int list[], int *size, int position); 
+void display(int list[], int size);
+
+int main() {
+    int list[MAX_SIZE];
+    int size = 0;
+    int choice, element, position;
+
+    printf("Enter the number of elements in the list: ");
+    scanf("%d", &size);
+
+    if (size > MAX_SIZE) {
+        printf("Size exceeds the maximum limit of %d.\n", MAX_SIZE);
+        return 1;
+    }
+
+    printf("Enter %d elements:\n", size);
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &list[i]);
+    }
+
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Insert an element\n");
+        printf("2. Delete an element\n");
+        printf("3. Display the list\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                printf("Enter element to insert: ");
+                scanf("%d", &element);
+                printf("Enter position (0 to %d): ", size);
+                scanf("%d", &position);
+                insert(list, &size, element, position);
+                break;
+            
+            case 2:
+                printf("Enter position to delete (0 to %d): ", size - 1);
+                scanf("%d", &position);
+                deleteElement(list, &size, position);
+                break;
+            
+            case 3:
+                display(list, size);
+                break;
+            
+            case 4:
+                printf("Exiting...\n");
+                return 0;
+            
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+    
+    return 0;
+}
+
+void insert(int list[], int *size, int element, int position) {
+    if (*size == MAX_SIZE) {
+        printf("List is full, cannot insert element.\n");
+        return;
+    }
+    if (position < 0 || position > *size) {
+        printf("Invalid position.\n");
+        return;
+    }
+    for (int i = *size; i > position; i--) {
+        list[i] = list[i - 1];
+    }
+    list[position] = element;
+    (*size)++;
+    printf("Element inserted successfully.\n");
+}
+
+void deleteElement(int list[], int *size, int position) {  
+    if (*size == 0) {
+        printf("List is empty, cannot delete element.\n");
+        return;
+    }
+    if (position < 0 || position >= *size) {
+        printf("Invalid position.\n");
+        return;
+    }
+    for (int i = position; i < *size - 1; i++) {
+        list[i] = list[i + 1];
+    }
+    (*size)--;
+    printf("Element deleted successfully.\n");
+}
+
+void display(int list[], int size) {
+    if (size == 0) {
+        printf("List is empty.\n");
+        return;
+    }
+    printf("List elements: ");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", list[i]);
+    }
+    printf("\n");
+}

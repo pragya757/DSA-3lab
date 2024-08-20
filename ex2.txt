@@ -68,3 +68,5 @@ int main() {
     }
     return 0;
 }
+
+// ->: The arrow operator is used to access members of a structure through a pointer.

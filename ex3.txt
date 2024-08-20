@@ -15,7 +15,7 @@ int main() {
         return 0;
     }
     
-    int **matrix1 = (int **)malloc(r1 * sizeof(int *));
+    int **matrix1 = (int **)malloc(r1 * sizeof(int *));//dynamically allocates memory
     for (int i = 0; i < r1; i++) {
         matrix1[i] = (int *)malloc(c1 * sizeof(int));
     }
@@ -66,7 +66,7 @@ int main() {
         free(matrix1[i]);
     }
     free(matrix1);
-    
+    // To avoid memory leaks, the program frees the memory allocated for the matrices 
     for (int i = 0; i < r2; i++) {
         free(matrix2[i]);
     }

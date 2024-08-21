@@ -178,3 +178,78 @@ int main() {
     return 0;
 }
 
+///////
+pseudo code for ex 5
+
+Structure Patient:
+    int patientID
+    Patient* next
+Function createPatient(id):
+    Allocate memory for a new Patient node
+    Set newPatient.patientID = id
+    Set newPatient.next = NULL
+    Return newPatient
+Function insertPatient(head, id):
+    newPatient = createPatient(id)
+    
+    If head is NULL:
+        head = newPatient
+    Else:
+        temp = head
+        While temp.next is not NULL:
+            temp = temp.next
+        End While
+        temp.next = newPatient
+    End If
+    Print "Patient with ID", id, "added to the queue."
+Function deletePatient(head):
+    If head is NULL:
+        Print "No patients in the queue."
+        Return
+    End If
+    
+    temp = head
+    head = head.next
+    Print "Patient with ID", temp.patientID, "has been seen by the doctor and removed from the queue."
+    Free memory for temp
+Function findPatient(head, id):
+    temp = head
+    While temp is not NULL:
+        If temp.patientID == id:
+            Print "Patient with ID", id, "found in the queue."
+            Return
+        End If
+        temp = temp.next
+    End While
+    Print "Patient with ID", id, "not found in the queue."
+Function displayQueue(head):
+    If head is NULL:
+        Print "The queue is empty."
+        Return
+    End If
+    
+    temp = head
+    Print "Current Queue:"
+    While temp is not NULL:
+        Print temp.patientID, "->"
+        temp = temp.next
+    End While
+    Print "NULL"
+head = NULL  // Initialize the head of the list
+
+insertPatient(head, 101)
+insertPatient(head, 102)
+insertPatient(head, 103)
+
+displayQueue(head)
+
+findPatient(head, 102)
+findPatient(head, 104)
+
+deletePatient(head)
+deletePatient(head)
+
+displayQueue(head)
+
+deletePatient(head)
+deletePatient(head)

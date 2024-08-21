@@ -79,3 +79,102 @@ int main() {
     
     return 0;
 }
+
+///////////////
+ex 5 
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a structure for the Patient node
+typedef struct Patient {
+    int patientID;
+    struct Patient* next;
+} Patient;
+
+// Function to create a new patient node
+Patient* createPatient(int id) {
+    Patient* newPatient = (Patient*)malloc(sizeof(Patient));
+    newPatient->patientID = id;
+    newPatient->next = NULL;
+    return newPatient;
+}
+
+// Function to insert a patient at the end of the list
+void insertPatient(Patient** head, int id) {
+    Patient* newPatient = createPatient(id);
+    if (*head == NULL) {
+        *head = newPatient;
+    } else {
+        Patient* temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newPatient;
+    }
+    printf("Patient with ID %d added to the queue.\n", id);
+}
+
+// Function to delete the patient at the beginning of the list
+void deletePatient(Patient** head) {
+    if (*head == NULL) {
+        printf("No patients in the queue.\n");
+        return;
+    }
+    Patient* temp = *head;
+    *head = (*head)->next;
+    printf("Patient with ID %d has been seen by the doctor and removed from the queue.\n", temp->patientID);
+    free(temp);
+}
+
+// Function to find a patient by their ID
+void findPatient(Patient* head, int id) {
+    Patient* temp = head;
+    while (temp != NULL) {
+        if (temp->patientID == id) {
+            printf("Patient with ID %d found in the queue.\n", id);
+            return;
+        }
+        temp = temp->next;
+    }
+    printf("Patient with ID %d not found in the queue.\n", id);
+}
+
+// Function to display the patient queue
+void displayQueue(Patient* head) {
+    if (head == NULL) {
+        printf("The queue is empty.\n");
+        return;
+    }
+    Patient* temp = head;
+    printf("Current Queue: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->patientID);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Main function to test the queue operations
+int main() {
+    Patient* head = NULL; // Initialize the head of the list
+
+    insertPatient(&head, 101);
+    insertPatient(&head, 102);
+    insertPatient(&head, 103);
+
+    displayQueue(head);
+
+    findPatient(head, 102);
+    findPatient(head, 104);
+
+    deletePatient(&head);
+    deletePatient(&head);
+
+    displayQueue(head);
+
+    deletePatient(&head);
+    deletePatient(&head);
+
+    return 0;
+}
+

@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a node in the singly linked list
+typedef struct Node {
+    int patientID;
+    struct Node* next;
+} Node;
+
+// Function to create a new node
+Node* createNode(int patientID) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->patientID = patientID;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a patient at the end of the list
+void insertPatient(Node** head, int patientID) {
+    Node* newNode = createNode(patientID);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        Node* temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+// Function to delete a patient from the beginning of the list
+void deletePatient(Node** head) {
+    if (*head == NULL) {
+        printf("No patients in the queue.\n");
+        return;
+    }
+    Node* temp = *head;
+    *head = (*head)->next;
+    free(temp);
+}
+
+// Function to find a patient by their ID
+Node* findPatient(Node* head, int patientID) {
+    Node* temp = head;
+    while (temp != NULL) {
+        if (temp->patientID == patientID) {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+// Function to print the queue (for testing purposes)
+void printQueue(Node* head) {
+    Node* temp = head;
+    while (temp != NULL) {
+        printf("Patient ID: %d\n", temp->patientID);
+        temp = temp->next;
+    }
+}
+
+// Main function to test the queue operations
+int main() {
+    Node* head = NULL;
+
+    insertPatient(&head, 101);
+    insertPatient(&head, 102);
+    insertPatient(&head, 103);
+
+    printf("Queue after inserting patients:\n");
+    printQueue(head);
+
+    deletePatient(&head);
+
+    printf("Queue after deleting a patient:\n");
+    printQueue(head);
+
+    int searchID = 102;
+    Node* foundPatient = findPatient(head, searchID);
+    if (foundPatient) {
+        printf("Patient with ID %d found in the queue.\n", searchID);
+    } else {
+        printf("Patient with ID %d not found in the queue.\n", searchID);
+    }
+
+    return 0;
+}

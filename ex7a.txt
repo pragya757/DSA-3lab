@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+
+// Stack structure using an array
+typedef struct {
+    int top;
+    int arr[MAX];
+} Stack;
+
+// Function to initialize the stack
+void initStack(Stack* s) {
+    s->top = -1;
+}
+
+// Function to check if the stack is empty
+int isEmpty(Stack* s) {
+    return s->top == -1;
+}
+
+// Function to check if the stack is full
+int isFull(Stack* s) {
+    return s->top == MAX - 1;
+}
+
+// Function to push an element onto the stack
+void push(Stack* s, int x) {
+    if (isFull(s)) {
+        printf("Stack overflow\n");
+        return;
+    }
+    s->arr[++(s->top)] = x;
+}
+
+// Function to pop an element from the stack
+int pop(Stack* s) {
+    if (isEmpty(s)) {
+        printf("Stack underflow\n");
+        return -1;
+    }
+    return s->arr[(s->top)--];
+}
+
+// Function to add two numbers represented by two stacks
+Stack addStacks(Stack* s1, Stack* s2) {
+    Stack result;
+    initStack(&result);
+    int carry = 0;
+
+    while (!isEmpty(s1) || !isEmpty(s2)) {
+        int sum = carry;
+        if (!isEmpty(s1)) {
+            sum += pop(s1);
+        }
+        if (!isEmpty(s2)) {
+            sum += pop(s2);
+        }
+        push(&result, sum % 10);
+        carry = sum / 10;
+    }
+
+    if (carry) {
+        push(&result, carry);
+    }
+
+    // Reverse the result stack to maintain the correct order
+    Stack finalResult;
+    initStack(&finalResult);
+    while (!isEmpty(&result)) {
+        push(&finalResult, pop(&result));
+    }
+
+    return finalResult;
+}
+
+// Function to print the stack
+void printStack(Stack* s) {
+    for (int i = s->top; i >= 0; i--) {
+        printf("%d", s->arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    Stack s1, s2;
+    initStack(&s1);
+    initStack(&s2);
+
+    // Example numbers: 342 + 465
+    push(&s1, 3);
+    push(&s1, 4);
+    push(&s1, 2);
+
+    push(&s2, 4);
+    push(&s2, 6);
+    push(&s2, 5);
+
+    Stack result = addStacks(&s1, &s2);
+    printf("Sum: ");
+    printStack(&result);
+
+    return 0;
+}

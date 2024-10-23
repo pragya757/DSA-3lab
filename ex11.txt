@@ -1,0 +1,160 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+// Create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// Insert a node into the BST
+struct Node* insert(struct Node* root, int data) {
+    if (root == NULL) {
+        return createNode(data);
+    }
+    if (data < root->data) {
+        root->left = insert(root->left, data);
+    } else if (data > root->data) {
+        root->right = insert(root->right, data);
+    }
+    return root;
+}
+
+// Find the minimum value node in a tree
+struct Node* findMin(struct Node* node) {
+    struct Node* current = node;
+    while (current && current->left != NULL)
+        current = current->left;
+    return current;
+}
+
+// Delete a node from the BST
+struct Node* deleteNode(struct Node* root, int data) {
+    if (root == NULL) {
+        return root;
+    }
+    if (data < root->data) {
+        root->left = deleteNode(root->left, data);
+    } else if (data > root->data) {
+        root->right = deleteNode(root->right, data);
+    } else {
+        // Node to be deleted found
+
+        // Case 1: Node with only one child or no child
+        if (root->left == NULL) {
+            struct Node* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct Node* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        // Case 2: Node with two children
+        struct Node* temp = findMin(root->right); // Find the inorder successor (smallest in the right subtree)
+
+        root->data = temp->data; // Copy the inorder successor's content to this node
+
+        root->right = deleteNode(root->right, temp->data); // Delete the inorder successor
+    }
+    return root;
+}
+
+// In-order traversal (Left, Root, Right)
+void inorder(struct Node* root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+// Pre-order traversal (Root, Left, Right)
+void preorder(struct Node* root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+// Post-order traversal (Left, Right, Root)
+void postorder(struct Node* root) {
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+// Main program with user input
+int main() {
+    struct Node* root = NULL;
+    int choice, value;
+
+    do {
+        printf("\nBinary Search Tree Operations:\n");
+        printf("1. Insert a node\n");
+        printf("2. Delete a node\n");
+        printf("3. In-order traversal\n");
+        printf("4. Pre-order traversal\n");
+        printf("5. Post-order traversal\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                root = insert(root, value);
+                printf("Inserted %d into the BST.\n", value);
+                break;
+
+            case 2:
+                printf("Enter value to delete: ");
+                scanf("%d", &value);
+                root = deleteNode(root, value);
+                printf("Deleted %d from the BST.\n", value);
+                break;
+
+            case 3:
+                printf("In-order traversal: ");
+                inorder(root);
+                printf("\n");
+                break;
+
+            case 4:
+                printf("Pre-order traversal: ");
+                preorder(root);
+                printf("\n");
+                break;
+
+            case 5:
+                printf("Post-order traversal: ");
+                postorder(root);
+                printf("\n");
+                break;
+
+            case 6:
+                printf("Exiting program.\n");
+                break;
+
+            default:
+                printf("Invalid choice! Please choose again.\n");
+        }
+    } while (choice != 6);
+
+    return 0;
+}
